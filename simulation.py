@@ -8,7 +8,8 @@ from simulator.config import *
 simulator = sim.Simulator(
     road_length=ROAD_LENGTH,
     spawn_proba=1/50,
-    max_speed=50
+    max_speed=50,
+    wait=True
 )
 
 while simulator.loop():

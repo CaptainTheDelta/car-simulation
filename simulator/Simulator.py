@@ -25,8 +25,12 @@ class Simulator():
         
 
         if wait:
+            sleep(1)
             for i in range(3,0,-1):
                 log.info(i)
+                sleep(1)
+
+
         log.info("Action !")
 
 
