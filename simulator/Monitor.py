@@ -17,6 +17,9 @@ class Monitor():
         self.TJs = []
         self.SDs = []
 
+        self.m = 0
+        self.nm = 0
+
     def find_traffic_problems(self):
         """Renvoie une liste de ralentissements et d'embouteillage.
 
@@ -53,12 +56,23 @@ class Monitor():
                 
                 if x != pos + l:
                     lObj.append(obj(pos,x-pos))
+                    # if type(obj) == TrafficJam:
+                    #     log.debug(f"Ralentissement : {pos}")
+                    # else:
+                    #     log.debug(f"Embouteillage : {pos}")
                 i += 1
 
             return lObj
 
-        pbms.extend(detect(movingCars,Slowdown))
-        pbms.extend(detect(notMovingCars,TrafficJam))
+        m = detect(movingCars,Slowdown)
+        nm = detect(notMovingCars,TrafficJam)
+        pbms.extend(m)
+        pbms.extend(nm)
+        
+        if self.m != len(m) or self.nm != len(nm):
+            log.debug(f"{len(m)} ralentissement{s(len(m))}  \t{len(nm)} embouteillage{s(len(nm))}")
+            self.m = len(m)
+            self.nm = len(nm)
 
         return pbms
 

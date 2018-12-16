@@ -3,7 +3,8 @@
 
 ### Résultat
 Vidéo 1 : https://raw.githubusercontent.com/CaptainTheDelta/car-simulation/master/examples/cars-sim-1.mp4  
-Vidéo 2 : https://raw.githubusercontent.com/CaptainTheDelta/car-simulation/master/examples/cars-sim-2.mp4  
+Vidéo 2 : https://raw.githubusercontent.com/CaptainTheDelta/car-simulation/master/examples/cars-sim-2.webm
+  
 Les rectangles sont des véhicules, les traits en dessous sont des indications sur la présence d'un bouchon ou d'un ralentissement.
 
 ### Require
