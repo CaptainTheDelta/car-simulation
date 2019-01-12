@@ -8,7 +8,10 @@ Vidéo 2 : https://raw.githubusercontent.com/CaptainTheDelta/car-simulation/mast
 Les rectangles sont des véhicules, les traits en dessous sont des indications sur la présence d'un bouchon ou d'un ralentissement.
 
 ### Require
-A besoin de pygame pour fonctionner
+Pour fonctionner :
+`pygame`  
+`sty`  
+(installés via `pip3`)
 
 ### Disclaimer
 Testé uniquement sous :
