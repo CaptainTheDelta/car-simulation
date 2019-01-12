@@ -53,12 +53,20 @@ class Simulator():
             tp.draw(self.screen,20)
 
         pygame.display.flip()
-
         sleep(n)
 
 
     def loop(self):
         for event in pygame.event.get():
+            # quitter la simulation
             if event.type == QUIT or (event.type == pygame.KEYDOWN and event.key == K_q):
                 return False
+            # mettre la simulation en pause
+            if event.type == pygame.KEYDOWN and event.key == K_p:
+                while True:
+                    for event in pygame.event.get():
+                        if event.type == QUIT or (event.type == pygame.KEYDOWN and event.key == K_q):
+                            return False
+                        if (event.type == pygame.KEYDOWN and event.key == K_p):
+                            return True
         return True

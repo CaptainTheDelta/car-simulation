@@ -70,6 +70,17 @@ class OnTheRoad():
         """
         return self.l
 
+    def colored(self,txt):
+        """Renvoie le texte écrit avec la couleur de l'objet.
+
+        Args:
+            txt (str): Texte.
+
+        Returns:
+            (str): Texte coloré.
+        """
+        return sty.fg(*self.color) + str(txt) + sty.fg.rs
+
     def draw(self,contener,l):
         """Dessine l'object sur la route.
 
@@ -106,10 +117,9 @@ class Car(OnTheRoad):
         self.vMax = v
         self.a = a
 
-        self.randomStop = 0
         self.reactionTime = 0
 
-        log.info(f"Voiture n°{self.id} créée. v={v}, a={a}")
+        log.info(self.colored(f"Voiture n°{self.id} créée. v={v}, a={a}"))
 
     def get_speed(self):
         """Renvoie la vitesse de la voiture.
@@ -119,6 +129,15 @@ class Car(OnTheRoad):
         """
         return self.v
 
+    def security(self):
+        """Renvoie la distance de sécurité que la voiture de derrière doit
+        respecter.
+
+        Returns:
+            (float): Distnce de sécurité.
+        """
+        return self.v * 6 // 10 + 2
+
     def move(self,obj=None):
         """Fait avancer la voiture, en fonction de la présence d'un objet 
         devant elle.
@@ -126,42 +145,37 @@ class Car(OnTheRoad):
         Args:
             d (float): Distance.
         """
-        v  = min(self.v + self.a * DT, self.vMax)
-        d = v * DT
+        if self.v == 0 and 0 < self.reactionTime < 2:
+            # if obj != None:
+            #     if obj.get_pos() - self.pos - obj.get_length() > 1.1*SAFETY_DISTANCE:
+            #         log.debug(self.colored("Rebond ?"))
+            self.reactionTime += DT
+            return self.pos
+
+        elif self.reactionTime >= 2:
+            self.reactionTime = 0
+
+        v = min(self.v + self.a * DT, self.vMax)
 
         if obj != None:
-            sec = obj.get_pos() - self.pos - obj.get_length() - SAFETY_DISTANCE
-            d = min(d,max(0,sec))
+            dist = obj.get_pos() - self.pos - obj.get_length()
+            sec = max(0,dist - obj.security())
+            v = min(v, sec/DT)
+            
+            if self.v != 0 and v == 0 and obj.get_speed() > 0:
+                log.debug(self.colored("Rebond ?"))
 
-        if self.v == 0:
-            # log.debug(f"{self.id} > {v} - {self.reactionTime}")
-            # if 0 < self.randomStop:
-            #     self.randomStop += 1
-                
-            #     if self.randomStop <= 500:
-            #         d = 0
-            #     else:
-            #         self.randomStop = 0
-            if False:
-                pass
-            else:
-                if d > 0:
-                    self.reactionTime += DT
-                
-                if self.reactionTime <= 1:
-                    d = 0
-                else:
-                    self.reactionTime = 0
+        if v == 0:
+            log.debug(self.colored(f"{self.id} Arrêt soudain !"))
+            self.reactionTime += DT
 
-        # elif (self.pos > ROAD_LENGTH/2 and self.randomStop == 0 and random() < 1/10000) or (0 < self.randomStop <= 500):
-        #     if self.randomStop == 0:
-        #         log.warning("Arrêt surprise")
-        #     d = 0
+        self.v = v
+        self.pos += v * DT
 
-        self.pos += d
-        self.v = d / DT
         if self.v - self.vMax > 1e-12:
-            log.warning(f"Flash ! {self.id} à {self.v} > {self.vMax}")
+            log.warning(self.colored(f"Flash ! {self.id} à {self.v} > {self.vMax}"))
+        if v < 0:
+            log.warning(self.colored(f"{self.id} Vitesse négative !"))
 
         return self.pos
 

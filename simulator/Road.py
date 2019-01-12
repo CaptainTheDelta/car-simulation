@@ -79,13 +79,20 @@ class Road():
             car (Car): Voiture.
             d (float): Distance.
         """
+        p = car.get_pos()
         pos = car.move(obj)
+        
+        if obj != None:
+            if pos > obj.get_pos():
+                log.warning(car.colored("DÉPASSEMENT PAR LE MILIEU"))
+                input()
+        
         if pos < self.L:
             self.status[car] = pos
         else:
             self.cars.remove(car)
             del self.status[car]
-            log.info(f"Voiture {car.get_id()} partie.")
+            log.info(car.colored(f"Voiture n°{car.get_id()} sortie."))
 
     # def obstacles_update(self):
         # """Update les obstacles sur la route."""
@@ -106,7 +113,6 @@ class Road():
         # on récupère la liste des objets sur la route :
         objects = sorted(self.status.items(),key=itemgetter(1))
         n = len(objects)
-        
         # on update les voitures
         for i,(obj,pos) in enumerate(objects):
             if type(obj) == Car:

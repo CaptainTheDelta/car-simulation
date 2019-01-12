@@ -69,10 +69,10 @@ class Monitor():
         pbms.extend(m)
         pbms.extend(nm)
         
-        if self.m != len(m) or self.nm != len(nm):
-            log.debug(f"{len(m)} ralentissement{s(len(m))}  \t{len(nm)} embouteillage{s(len(nm))}")
-            self.m = len(m)
-            self.nm = len(nm)
+        # if self.m != len(m) or self.nm != len(nm):
+        #     log.debug(f"{len(m)} ralentissement{s(len(m))}  \t{len(nm)} embouteillage{s(len(nm))}")
+        #     self.m = len(m)
+        #     self.nm = len(nm)
 
         return pbms
 
