@@ -1,5 +1,5 @@
 # coding: utf-8
-from .__init__ import *
+from simulator.__init__ import *
 
 
 
@@ -71,6 +71,7 @@ class Road():
         """
         return sorted(self.status.items(),key=itemgetter(1))
 
+
     def move_car(self,car,obj=None):
         """Fait avancer la voiture d'une certaine distance.
         Si la voiture sort de la route, elle est désintégrée.
@@ -85,34 +86,22 @@ class Road():
         if obj != None:
             if pos > obj.get_pos():
                 log.warning(car.colored("DÉPASSEMENT PAR LE MILIEU"))
-                input()
         
         if pos < self.L:
             self.status[car] = pos
         else:
             self.cars.remove(car)
             del self.status[car]
-            log.info(car.colored(f"Voiture n°{car.get_id()} sortie."))
-
-    # def obstacles_update(self):
-        # """Update les obstacles sur la route."""
-        # def update_obs(obs):
-            # if self.t <= obs.get_tf():
-
-
 
 
     def update(self):
         """Update la route au temps."""
         self.t += DT
 
-        # on update les obstacles
-        # self.obsSpawned = [o for o in self.obsSpawned if self.t <= o.get_tf()] + [o for o in self.obsToSpawn if self.t >= o.get_ti()]
-        # self.obsToSpawn = [o for o in self.obsToSpawn if self.t < o.get_ti()]
-        
         # on récupère la liste des objets sur la route :
         objects = sorted(self.status.items(),key=itemgetter(1))
         n = len(objects)
+        
         # on update les voitures
         for i,(obj,pos) in enumerate(objects):
             if type(obj) == Car:

@@ -11,9 +11,9 @@ import sty
 log.basicConfig(format='[%(levelname)s] %(message)s',level=log.DEBUG)
 # log.disable()
 
-from .config import *
-from .fonctions import *
-from .OnTheRoad import *
-from .Road import *
-from .Monitor import *
-from .Simulator import *
+from simulator.config import *
+from simulator.fonctions import *
+from simulator.OnTheRoad import *
+from simulator.Road import *
+from simulator.Monitor import *
+from simulator.Simulator import *

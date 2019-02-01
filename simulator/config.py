@@ -19,4 +19,3 @@ ROAD_LENGTH = 1800 # m
 #----------------------------- réglages voitures ------------------------------
 
 ACCELERATION = 10 # m.s-2
-SAFETY_DISTANCE = 10 # m

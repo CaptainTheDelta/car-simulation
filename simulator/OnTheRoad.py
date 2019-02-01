@@ -1,5 +1,5 @@
 # coding: utf-8
-from .__init__ import *
+from simulator.__init__ import *
 
 
 
@@ -95,8 +95,29 @@ class OnTheRoad():
 
         pygame.draw.rect(contener, self.color, (x,y,l,w))
 
+    def debug(self,txt):
+        """Debug du texte avec la couleur de l'objet.
 
+        Args:
+            txt (str): texte.
+        """
+        log.debug(self.colored(txt))
 
+    def warning(self,txt):
+        """Alerte avec le texte avec la couleur de l'objet.
+
+        Args:
+            txt (str): texte.
+        """
+        log.warning(self.colored(txt))
+
+    def info(self,txt):
+        """Informe avec le texte avec la couleur de l'objet.
+
+        Args:
+            txt (str): texte.
+        """
+        log.info(self.colored(txt))
 
 class Car(OnTheRoad):
     """Voiture. Vroom."""
@@ -115,11 +136,16 @@ class Car(OnTheRoad):
 
         self.v = v
         self.vMax = v
-        self.a = a
+        self.acc = a
+        self.dcc = -50
 
         self.reactionTime = 0
 
-        log.info(self.colored(f"Voiture n°{self.id} créée. v={v}, a={a}"))
+        self.info(f"Voiture n°{self.id} créée. v={v}, a={a}")
+
+    def __del__(self):
+        """Supprime la voiture."""
+        self.info(f"Voiture n°{self.id} sortie.")
 
     def get_speed(self):
         """Renvoie la vitesse de la voiture.
@@ -146,36 +172,43 @@ class Car(OnTheRoad):
             d (float): Distance.
         """
         if self.v == 0 and 0 < self.reactionTime < 2:
-            # if obj != None:
-            #     if obj.get_pos() - self.pos - obj.get_length() > 1.1*SAFETY_DISTANCE:
-            #         log.debug(self.colored("Rebond ?"))
             self.reactionTime += DT
             return self.pos
 
         elif self.reactionTime >= 2:
             self.reactionTime = 0
 
-        v = min(self.v + self.a * DT, self.vMax)
+        v = min(self.v + self.acc * DT, self.vMax)
 
         if obj != None:
-            dist = obj.get_pos() - self.pos - obj.get_length()
-            sec = max(0,dist - obj.security())
-            v = min(v, sec/DT)
-            
-            if self.v != 0 and v == 0 and obj.get_speed() > 0:
-                log.debug(self.colored("Rebond ?"))
+            dist = obj.get_pos() - self.pos - self.get_length()
+            v_obj = obj.get_speed()
+            sec = obj.security()
 
-        if v == 0:
-            log.debug(self.colored(f"{self.id} Arrêt soudain !"))
-            self.reactionTime += DT
+            # calcul de la distance séparant les deux véhicules si le
+            # deuxième commençait à déccelerer maintenant :
+            d = dist + (v_obj - self.v)**2 / (2*self.dcc)
+            T = (v_obj - self.v)/self.dcc
+
+            if d < sec:
+                # LÀ IL FAUT RECALCULER L'ACCÉLÉRATION NÉCESSAIRE !!!
+                dcc = 2 * (dist + (v_obj-self.v)*T)/T**2
+                v = max(0, self.v + dcc * DT)
+                self.debug(f"On ralentit {self.v} -> {v}")
+            # else:
+            #     self.debug(f"On accélère {self.v} -> {v}")
 
         self.v = v
         self.pos += v * DT
 
+        if v == 0:
+            self.reactionTime += DT
+            self.debug(f"{self.id} Arrêt soudain !")
+        
         if self.v - self.vMax > 1e-12:
-            log.warning(self.colored(f"Flash ! {self.id} à {self.v} > {self.vMax}"))
+            self.warning(f"Flash ! {self.id} à {self.v} > {self.vMax}")
         if v < 0:
-            log.warning(self.colored(f"{self.id} Vitesse négative !"))
+            self.warning(f"{self.id} Vitesse négative !")
 
         return self.pos
 

@@ -1,5 +1,5 @@
 # coding: utf-8
-from .__init__ import *
+from simulator.__init__ import *
 
 
 
@@ -10,7 +10,11 @@ class Simulator():
         """Initialise la simulation.
 
         Args:
-            L (float): Longueur de la route.
+            road_length (float): Longueur de la route.
+            max_speed (float): Vitesse maximale autorisée sur la route.
+                (à noter que certains conducteurs peuvent la dépasser...)
+            spawn_proba (float): Probabilité qu'une voiture entre sur la route
+                à chaque instant. (compris entre 0 et 1).
             wait (bool): Démarage immédiat de la simulation, ou pas.
         """
         pygame.init()
@@ -54,6 +58,11 @@ class Simulator():
 
         pygame.display.flip()
         sleep(n)
+
+
+    def pause(self):
+        """Met la simulation en pause."""
+        
 
 
     def loop(self):

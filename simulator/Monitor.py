@@ -1,5 +1,5 @@
 # coding: utf-8
-from .__init__ import *
+from simulator.__init__ import *
 
 
 
@@ -50,7 +50,7 @@ class Monitor():
                 l = cars[i][0].get_length()
                 x = pos + l
 
-                while i < n-1 and cars[i+1][1] < x + SAFETY_DISTANCE*1.3:
+                while i < n-1 and cars[i+1][1] < x + SAFETY_DISTANCE*1.2:
                     x = cars[i+1][1] + cars[i+1][0].get_length()
                     i += 1
                 
