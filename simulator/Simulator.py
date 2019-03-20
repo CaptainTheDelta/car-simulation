@@ -79,3 +79,7 @@ class Simulator():
                         if (event.type == pygame.KEYDOWN and event.key == K_p):
                             return True
         return True
+
+
+
+log.debug(f"{__name__} importé.")

@@ -14,6 +14,10 @@ log.basicConfig(format='[%(levelname)s] %(message)s',level=log.DEBUG)
 from simulator.config import *
 from simulator.fonctions import *
 from simulator.OnTheRoad import *
+from simulator.Car import *
+from simulator.Obstacle import *
+from simulator.TrafficJam import *
+from simulator.Slowdown import *
 from simulator.Road import *
 from simulator.Monitor import *
 from simulator.Simulator import *

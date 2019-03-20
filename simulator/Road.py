@@ -31,7 +31,6 @@ class Road():
         self.obsSpawned = []
         
         self.t = 0
-        self.security = SAFETY_DISTANCE
 
     def __repr__(self):
         """Renvoie une description de la route."""
@@ -90,12 +89,14 @@ class Road():
         if pos < self.L:
             self.status[car] = pos
         else:
+            car.debug(f"suppression : {pos} > {self.L}")
             self.cars.remove(car)
             del self.status[car]
 
 
     def update(self):
         """Update la route au temps."""
+        # log.info(f"{self.t:.3f}".center(20,"-"))
         self.t += DT
 
         # on récupère la liste des objets sur la route :
@@ -107,10 +108,11 @@ class Road():
             if type(obj) == Car:
                 if i < n - 1:
                 	self.move_car(obj,objects[i+1][0])
-                self.move_car(obj)
+                else:
+                    self.move_car(obj)
 
         # On tente de faire spawn une voiture
-        if len([o for o,x in self.status.items() if x < SAFETY_DISTANCE]) == 0:
+        if len([o for o,x in self.status.items() if x < o.security()]) == 0:
             if random() <= self.p:
                 self.spawn_car()
 

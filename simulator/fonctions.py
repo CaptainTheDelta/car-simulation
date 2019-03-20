@@ -26,4 +26,4 @@ def kmh2ms(v):
     return v / 3.6
 
 
-from .__init__ import *
+from simulator.__init__ import *

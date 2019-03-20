@@ -1,7 +1,7 @@
 # Simulation d'embouteillage
 
 
-### Résultat
+### Résultats
 Vidéo 1 : https://raw.githubusercontent.com/CaptainTheDelta/car-simulation/master/examples/cars-sim-1.mp4  
 Vidéo 2 : https://raw.githubusercontent.com/CaptainTheDelta/car-simulation/master/examples/cars-sim-2.webm
   
