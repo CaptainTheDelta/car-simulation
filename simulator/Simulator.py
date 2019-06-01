@@ -18,7 +18,7 @@ class Simulator():
             wait (bool): Démarage immédiat de la simulation, ou pas.
         """
         pygame.init()
-        self.screen = pygame.display.set_mode((road_length, 50))
+        self.screen = pygame.display.set_mode((road_length, 30))
         pygame.display.set_caption(f"Simulation d'une route")
         icon = pygame.image.load("simulator/img/car.png")
         pygame.display.set_icon(icon)

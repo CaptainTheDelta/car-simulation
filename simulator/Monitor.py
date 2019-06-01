@@ -47,14 +47,13 @@ class Monitor():
 
             while i < n:
                 pos = cars[i][1]
-                l = cars[i][0].get_length()
-                x = pos + l
+                x = pos
 
                 while i < n-1 and cars[i+1][1] < x + SAFETY_DISTANCE*1.2:
-                    x = cars[i+1][1] + cars[i+1][0].get_length()
+                    x = cars[i+1][1]
                     i += 1
                 
-                if x != pos + l:
+                if x != pos:
                     lObj.append(obj(pos,x-pos))
                     # if type(obj) == TrafficJam:
                     #     log.debug(f"Ralentissement : {pos}")

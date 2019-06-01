@@ -1,7 +1,8 @@
 # coding: utf-8
+from math import sqrt
 import pygame
 from pygame.locals import *
-from random import randint, gauss, random
+from random import randint, gauss, random, shuffle
 from operator import itemgetter
 from time import sleep
 import logging as log

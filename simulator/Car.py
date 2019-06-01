@@ -6,17 +6,15 @@ from simulator.__init__ import *
 class Car(OnTheRoad):
     """Voiture. Vroom."""
 
-    def __init__(self,v,a,length,width,color=[]):
+    def __init__(self,v,a,color=[]):
         """Initialise une voiture.
 
         Args:
             v (float): Vitesse de la voiture (m.s-1).
             a (float): Accélération (m.s-2).
-            length (float): Longueur de la voiture.
-            width (float): Largeur de la voiture.
             color (list): Couleur (rgb) de la voiture.
         """
-        super().__init__(0,length,width,color)
+        super().__init__(0,1,2,color)
 
         self.v = v
         self.vMax = v
@@ -30,6 +28,9 @@ class Car(OnTheRoad):
     def __del__(self):
         """Supprime la voiture."""
         self.info(f"Voiture n°{self.id} sortie.")
+
+    def __repr__(self):
+        return self.colored(f"Car n°{self.id}")
 
     def get_speed(self):
         """Renvoie la vitesse de la voiture.
@@ -55,62 +56,61 @@ class Car(OnTheRoad):
         Args:
             d (float): Distance.
         """
-        if self.v == 0 and 0 < self.reactionTime < 2:
-            self.reactionTime += DT
-            return self.pos
+        if self.v == 0:
+            if obj != None:
+                vf = obj.get_speed()
+                sec = obj.security()
+                Δx = obj.get_pos() - self.pos
 
-        elif self.reactionTime >= 2:
-            self.reactionTime = 0
+                if vf == 0 and Δx <= sec:
+                    return self.pos
+
+            if 0 <= self.reactionTime < 2:
+                self.reactionTime += DT
+                return self.pos
+            else:
+                self.reactionTime = 0
 
         v = min(self.v + self.acc * DT, self.vMax)
 
         if obj != None:
-            v_obj = obj.get_speed()
+            vf = obj.get_speed()
 
-            if v_obj < self.v:
-                dist = obj.get_pos() - self.pos - self.get_length()
+            if self.v > vf:
                 sec = obj.security()
+                Δx = obj.get_pos() - self.pos
 
+                # calcul du temps nécessaire pour passer de v à vf
+                T = (vf - self.v) / self.dcc
+                # calcul de la distance parcourue pdt ce temps
+                d = 1/2 * self.dcc * T ** 2 + self.v * T
 
+                dist = (vf * T + Δx) - d
 
-                # calcul de la distance séparant les deux véhicules si le
-                # deuxième commençait à déccelerer maintenant :
-                d = dist + (v_obj - self.v)**2 / (2*self.dcc)
-                T = (v_obj - self.v) / self.dcc
+                if sec < dist < 1.1*sec:
+                    v = max(0, self.v + self.dcc * DT)
 
+                # recalcul
+                T = (vf - v) / self.dcc
+                d = 1/2 * self.dcc * T ** 2 + v * T
+                dist = (vf * T + Δx) - d                
 
-                # if self.id == 1:
-                #     self.debug(f"ralentissement safe: {d:.3f} - {dist:.3f} ({sec}) => {self.v} {v_obj}")
-
-
-                if d < sec:
-
-                    # LÀ IL FAUT RECALCULER L'ACCÉLÉRATION NÉCESSAIRE !!!
-                    dcc = - 2 * (dist + (self.v-v_obj)*T)/T**2
+                if (v-vf) * DT > Δx-sec:
+                    # self.debug(f"Δx : {Δx}")
+                    dcc =  - (vf - self.v) ** 2 / (2*(Δx-sec))
+                    vp = v
                     v = max(0, self.v + dcc * DT)
-                    if dcc > 0:
-                        self.warning(f"FUSÉE ! dcc : {dcc}")
+                    # self.debug(f"{self.dcc} -> {dcc} : {vp} -> {v}")
 
-                    if self.id == 1:
-                        self.debug(f"Ralentissement : {abs(self.v-v)}")
+                if (v-vf) * DT > Δx-sec:
+                    # self.debug(f"{(vf - self.v)**2} / 2*{Δx-sec}")
+                    v = 0.9*vf
 
-                    # self.debug(f"On ralentit {self.v} -> {v}")
-                # else:
-                #     self.debug(f"On accélère {self.v} -> {v}")
+
+
 
         self.v = v
         self.pos += v * DT
-
-
-        # if v == 0:
-        #     self.reactionTime += DT
-        #     self.debug(f"{self.id} Arrêt soudain !")
-        
-
-        # if self.v - self.vMax > 1e-12:
-            # self.warning(f"Flash ! {self.id} à {self.v} > {self.vMax}")
-        # if v < 0:
-        #     self.warning(f"{self.id} Vitesse négative !")
 
         return self.pos
 

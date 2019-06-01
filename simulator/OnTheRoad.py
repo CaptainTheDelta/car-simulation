@@ -21,7 +21,12 @@ class OnTheRoad():
         self.w = width
 
         if color == []:
-            color = [randint(0,255) for i in range(3)]
+            treshold = 255
+            r = randint(0,255)
+            g = randint(int(sqrt(max(0,(treshold**2-r**2)/2))),255)
+            b = randint(int(sqrt(max(0,treshold**2-r**2-g**2))),255) 
+            color = [r,g,b]
+            shuffle(color)
         self.color = color
         
         self.id = type(self)._id

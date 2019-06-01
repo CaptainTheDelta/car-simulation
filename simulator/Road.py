@@ -56,7 +56,7 @@ class Road():
             log.warning("Véhicule à vitesse négative.")
             return
         
-        car = Car(v,a,randint(2,5),2)
+        car = Car(v,a)
         self.status[car] = 0
         self.cars.append(car)
 
@@ -84,12 +84,11 @@ class Road():
         
         if obj != None:
             if pos > obj.get_pos():
-                log.warning(car.colored("DÉPASSEMENT PAR LE MILIEU"))
+                log.warning(car.colored(" --------- DÉPASSEMENT PAR LE MILIEU --------- "))
         
         if pos < self.L:
             self.status[car] = pos
         else:
-            car.debug(f"suppression : {pos} > {self.L}")
             self.cars.remove(car)
             del self.status[car]
 
@@ -101,6 +100,7 @@ class Road():
 
         # on récupère la liste des objets sur la route :
         objects = sorted(self.status.items(),key=itemgetter(1))
+        # log.debug(objects)
         n = len(objects)
         
         # on update les voitures
