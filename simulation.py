@@ -26,11 +26,14 @@ import simulator
 
 #--------------------------------- main loop ----------------------------------
 
-road_sim = simulator.Simulator(
-    road_length=args.road_length,
-    spawn_proba=args.spawn_proba,
-    max_speed=args.max_speed
-)
+
+for p in [1/50]:
+    for i in range(1):
+        road_sim = simulator.Simulator(
+            road_length=args.road_length,
+            spawn_proba=p,
+            max_speed=args.max_speed
+        )
 
 while road_sim.loop():
     road_sim.update(0.003)

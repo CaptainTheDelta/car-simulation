@@ -75,11 +75,10 @@ class Car(OnTheRoad):
 
         if obj != None:
             vf = obj.get_speed()
+            sec = obj.security()
+            Δx = obj.get_pos() - self.pos
 
-            if self.v > vf:
-                sec = obj.security()
-                Δx = obj.get_pos() - self.pos
-
+            if (v-vf) * DT > Δx-sec:
                 # calcul du temps nécessaire pour passer de v à vf
                 T = (vf - self.v) / self.dcc
                 # calcul de la distance parcourue pdt ce temps
