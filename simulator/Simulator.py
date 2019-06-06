@@ -33,19 +33,11 @@ class Simulator():
 
     def __del__(self):
         """Exécuté lorsque la simulation est finie."""
-        pygame.quit()
         log.info("Coupez !")
 
 
     def update(self,n):
-        self.screen.fill(bg)
-
-        status = self.road.update()
-
-        
-
-        pygame.display.flip()
-        sleep(n)
+        pprint(self.road.update())
 
 
     def pause(self):
@@ -54,18 +46,6 @@ class Simulator():
 
 
     def loop(self):
-        for event in pygame.event.get():
-            # quitter la simulation
-            if event.type == QUIT or (event.type == pygame.KEYDOWN and event.key == K_q):
-                return False
-            # mettre la simulation en pause
-            if event.type == pygame.KEYDOWN and event.key == K_p:
-                while True:
-                    for event in pygame.event.get():
-                        if event.type == QUIT or (event.type == pygame.KEYDOWN and event.key == K_q):
-                            return False
-                        if (event.type == pygame.KEYDOWN and event.key == K_p):
-                            return True
         return True
 
 

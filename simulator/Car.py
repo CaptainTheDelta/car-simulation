@@ -18,8 +18,8 @@ class Car(OnTheRoad):
 
         self.v = v
         self.vMax = v
-        self.acc = a
-        self.dcc = -20
+        self.acc = 3
+        self.dcc = -2
 
         self.reactionTime = 0
 
@@ -59,7 +59,7 @@ class Car(OnTheRoad):
         if self.v == 0:
             if obj != None:
                 vf = obj.get_speed()
-                sec = obj.security()
+                sec = self.security()
                 Δx = obj.get_pos() - self.pos
 
                 if vf == 0 and Δx <= sec:
