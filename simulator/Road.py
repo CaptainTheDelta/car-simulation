@@ -31,6 +31,9 @@ class Road():
         self.obsSpawned = []
         
         self.t = 0
+        self.nFlow = int(10/DT)
+        self.flow = [0] * self.nFlow
+
 
     def __repr__(self):
         """Renvoie une description de la route."""
@@ -116,7 +119,35 @@ class Road():
             if random() <= self.p:
                 self.spawn_car()
 
-        return sorted(self.status.items(),key=itemgetter(1))
+        objects 
+        cars = sorted(self.status.items(),key=itemgetter(1))
+
+        x = 1000
+        l = 800
+
+        density = len(list(filter(lambda c: x < c[1] <= x+l, cars))) / l
+        flow = 0
+
+        if self.t != 0:
+            carsIn = 0
+            carsOut = 0
+            self.flow.pop(0)
+
+            for c,p in objects:
+                for c2,p2 in cars:
+                    if c == c2:
+                        if p <= x <= p2:
+                            carsIn += 1
+                        elif p <= x+l <= p2:
+                            carsOut += 1
+
+            flow = carsIn - carsOut
+            self.flow.append(flow)
+            flow = sum(self.flow) / self.nFlow
+
+        return density,flow
+
+        # return sorted(self.status.items(),key=itemgetter(1))
 
 
 log.debug(f"{__name__} importé.")

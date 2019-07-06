@@ -23,11 +23,11 @@ class Car(OnTheRoad):
 
         self.reactionTime = 0
 
-        self.info(f"Voiture n°{self.id} créée. v={v}, a={a}")
+        # self.info(f"Voiture n°{self.id} créée. v={v}, a={a}")
 
     def __del__(self):
         """Supprime la voiture."""
-        self.info(f"Voiture n°{self.id} sortie.")
+        # self.info(f"Voiture n°{self.id} sortie.")
 
     def __repr__(self):
         return self.colored(f"Car n°{self.id}")
@@ -50,12 +50,6 @@ class Car(OnTheRoad):
         return self.v * 6 // 10 + 2
 
     def move(self,obj=None):
-        """Fait avancer la voiture, en fonction de la présence d'un objet 
-        devant elle.
-
-        Args:
-            d (float): Distance.
-        """
         if self.v == 0:
             if obj != None:
                 vf = obj.get_speed()
@@ -79,9 +73,7 @@ class Car(OnTheRoad):
             Δx = obj.get_pos() - self.pos
 
             if (v-vf) * DT > Δx-sec:
-                # calcul du temps nécessaire pour passer de v à vf
                 T = (vf - self.v) / self.dcc
-                # calcul de la distance parcourue pdt ce temps
                 d = 1/2 * self.dcc * T ** 2 + self.v * T
 
                 dist = (vf * T + Δx) - d
@@ -89,24 +81,17 @@ class Car(OnTheRoad):
                 if sec < dist < 1.1*sec:
                     v = max(0, self.v + self.dcc * DT)
 
-                # recalcul
                 T = (vf - v) / self.dcc
                 d = 1/2 * self.dcc * T ** 2 + v * T
                 dist = (vf * T + Δx) - d                
 
                 if (v-vf) * DT > Δx-sec:
-                    # self.debug(f"Δx : {Δx}")
                     dcc =  - (vf - self.v) ** 2 / (2*(Δx-sec))
-                    vp = v
+                    # vp = v
                     v = max(0, self.v + dcc * DT)
-                    # self.debug(f"{self.dcc} -> {dcc} : {vp} -> {v}")
 
                 if (v-vf) * DT > Δx-sec:
-                    # self.debug(f"{(vf - self.v)**2} / 2*{Δx-sec}")
                     v = 0.9*vf
-
-
-
 
         self.v = v
         self.pos += v * DT

@@ -20,6 +20,8 @@ class Simulator():
         self.road = Road("Voie 1",road_length,max_speed,spawn_proba)
         self.monitor = Monitor(self.road)
         
+        self.D = []
+        self.F = []
 
         if wait:
             for i in range(3,0,-1):
@@ -27,18 +29,30 @@ class Simulator():
                 sleep(1)
 
 
-        log.info("Action !")
+        # log.info("Action !")
 
 
 
-    def __del__(self):
-        """Exécuté lorsque la simulation est finie."""
-        log.info("Coupez !")
+    def get_res(self):
+        k = 0
+        n = len(self.D)
+        d = 0
+        f = 0
+
+        while k < n and self.D[k] == 0 and self.F[k] == 0:
+            k += 1
+
+        if k != n:
+            d = sum(self.D[k:]) / (n-k)
+            f = sum(self.F[k:]) / (n-k)
+        
+        return d, f
 
 
     def update(self,n):
-        pprint(self.road.update())
-
+        d,f = self.road.update()
+        self.D.append(d)
+        self.F.append(f)
 
     def pause(self):
         """Met la simulation en pause."""
